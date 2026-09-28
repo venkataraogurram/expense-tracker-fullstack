@@ -50,6 +50,7 @@ export default function App() {
   const [error, setError] = useState('');
   const [toast, setToast] = useState(null);
   const [theme, toggleTheme] = useTheme();
+  const [user, setUser] = useState(null); // { alias, name } when behind the Midway-protected ALB
   const formRef = useRef(null);
 
   const notify = useCallback((message, tone = 'success') => {
@@ -74,6 +75,7 @@ export default function App() {
 
   useEffect(() => {
     api.categories().then(setCategories).catch((e) => setError(e.message));
+    api.me().then((me) => setUser(me?.authenticated ? me : null)).catch(() => setUser(null));
   }, []);
 
   useEffect(() => {
@@ -130,6 +132,17 @@ export default function App() {
           >
             {month === '' ? 'This month' : 'All time'}
           </button>
+          {user && (
+            <div className="user" title={`Signed in via Midway as ${user.alias}`}>
+              <span className="user-avatar" aria-hidden="true">
+                {user.alias.slice(0, 2).toUpperCase()}
+              </span>
+              <span className="user-text">
+                <span className="user-name">{user.name || user.alias}</span>
+                <span className="user-alias">@{user.alias}</span>
+              </span>
+            </div>
+          )}
           <button
             type="button"
             className="icon-btn theme-toggle"

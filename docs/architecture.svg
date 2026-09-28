@@ -1,0 +1,182 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800" font-family="Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#475569"/>
+    </marker>
+    <marker id="arrow-dashed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#94a3b8"/>
+    </marker>
+    <linearGradient id="brand" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#4f46e5"/>
+      <stop offset="1" stop-color="#7c3aed"/>
+    </linearGradient>
+    <style>
+      .title { font-size: 22px; font-weight: 700; fill: #0f172a; letter-spacing: -0.01em; }
+      .subtitle { font-size: 13px; fill: #64748b; }
+      .section { font-size: 12px; font-weight: 700; fill: #475569; letter-spacing: .08em; text-transform: uppercase; }
+      .box { rx: 12; ry: 12; stroke-width: 1.5; }
+      .h { font-size: 14px; font-weight: 700; fill: #0f172a; }
+      .t { font-size: 12px; fill: #475569; }
+      .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11.5px; fill: #334155; }
+      .lbl { font-size: 11.5px; fill: #475569; font-weight: 600; }
+      .flow { stroke: #475569; stroke-width: 1.6; fill: none; marker-end: url(#arrow); }
+      .dash { stroke: #94a3b8; stroke-width: 1.4; fill: none; stroke-dasharray: 5 4; marker-end: url(#arrow-dashed); }
+      .pill { rx: 999; ry: 999; }
+    </style>
+  </defs>
+
+  <rect width="1200" height="800" fill="#f8fafc"/>
+
+  <!-- Title -->
+  <rect x="40" y="28" width="40" height="40" rx="11" fill="url(#brand)"/>
+  <text x="60" y="56" text-anchor="middle" font-size="22" font-weight="800" fill="#fff">₹</text>
+  <text x="94" y="50" class="title">Expense Tracker — Architecture</text>
+  <text x="94" y="70" class="subtitle">React 18 (Vite) · Spring Boot 3.5 / Java 21 · MySQL 8.4 · AWS Elastic Beanstalk + ALB + RDS + ACM + Route 53</text>
+
+  <!-- ===================== Section A: AWS deployment ===================== -->
+  <rect x="40" y="96" width="1120" height="340" rx="16" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+  <text x="60" y="122" class="section">A · Runtime on AWS (us-east-1, default VPC)</text>
+
+  <!-- Browser -->
+  <rect x="60" y="230" width="170" height="104" class="box" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="145" y="256" text-anchor="middle" font-size="22">🧑‍💻</text>
+  <text x="145" y="282" text-anchor="middle" class="h">Browser</text>
+  <text x="145" y="300" text-anchor="middle" class="t">React SPA, fetch() to /api</text>
+  <text x="145" y="316" text-anchor="middle" class="mono">expenses.venkatgh.people.aws.dev</text>
+
+  <!-- Route 53 -->
+  <rect x="300" y="140" width="200" height="62" class="box" fill="#f5f3ff" stroke="#8b5cf6"/>
+  <text x="400" y="163" text-anchor="middle" class="h">Route 53</text>
+  <text x="400" y="181" text-anchor="middle" class="t">A record (alias) → ALB</text>
+  <text x="400" y="195" text-anchor="middle" class="t">+ ACM validation CNAME</text>
+
+  <!-- ACM -->
+  <rect x="540" y="140" width="200" height="62" class="box" fill="#ecfeff" stroke="#06b6d4"/>
+  <text x="640" y="163" text-anchor="middle" class="h">AWS Certificate Manager</text>
+  <text x="640" y="181" text-anchor="middle" class="t">Public TLS certificate</text>
+  <text x="640" y="195" text-anchor="middle" class="t">DNS-validated, auto-renews</text>
+
+  <!-- ALB -->
+  <rect x="540" y="230" width="200" height="140" class="box" fill="#f5f3ff" stroke="#8c4fff"/>
+  <text x="640" y="254" text-anchor="middle" class="h">Application Load Balancer</text>
+  <text x="640" y="276" text-anchor="middle" class="mono">:443  HTTPS  (ACM cert)</text>
+  <text x="640" y="293" text-anchor="middle" class="mono">:80   301 → HTTPS</text>
+  <text x="640" y="316" text-anchor="middle" class="t">Target group health check</text>
+  <text x="640" y="331" text-anchor="middle" class="mono">GET /actuator/health = 200</text>
+  <text x="640" y="355" text-anchor="middle" class="t">Public subnets, 2 AZs</text>
+
+  <!-- VPC compute/data area -->
+  <rect x="790" y="140" width="350" height="280" rx="14" fill="#fffbeb" stroke="#f59e0b" stroke-width="1.3" stroke-dasharray="6 4"/>
+  <text x="808" y="162" class="lbl" fill="#b45309">Elastic Beanstalk environment · expense-tracker-lb</text>
+
+  <!-- EC2 / EB -->
+  <rect x="808" y="176" width="314" height="110" class="box" fill="#ffffff" stroke="#f59e0b"/>
+  <text x="965" y="199" text-anchor="middle" class="h">EC2 · t3.small (Auto Scaling 1–2)</text>
+  <text x="965" y="218" text-anchor="middle" class="t">Corretto 21 platform, Amazon Linux 2023</text>
+  <text x="965" y="238" text-anchor="middle" class="mono">nginx :80  →  Spring Boot :5000</text>
+  <text x="965" y="256" text-anchor="middle" class="mono">java -jar expense-tracker-1.0.0.jar</text>
+  <text x="965" y="275" text-anchor="middle" class="t">SG: expense-tracker-app-sg</text>
+
+  <!-- RDS -->
+  <rect x="808" y="316" width="314" height="90" class="box" fill="#eef2ff" stroke="#3b48cc"/>
+  <text x="965" y="339" text-anchor="middle" class="h">Amazon RDS · MySQL 8.4</text>
+  <text x="965" y="357" text-anchor="middle" class="t">db.t3.micro · 20 GB gp3 · not publicly accessible</text>
+  <text x="965" y="374" text-anchor="middle" class="mono">db: expense_tracker  table: expenses</text>
+  <text x="965" y="392" text-anchor="middle" class="t">SG: expense-tracker-db-sg — 3306 from app-sg only</text>
+
+  <!-- Flows: Browser -> Route 53 (dashed), Browser -> ALB, ACM -> ALB, ALB -> EC2, EC2 -> RDS -->
+  <path class="dash" d="M230,250 C270,250 270,171 300,171"/>
+  <text x="246" y="200" class="lbl" fill="#64748b">① DNS</text>
+
+  <path class="flow" d="M230,300 L540,300"/>
+  <rect x="330" y="284" width="110" height="20" class="pill" fill="#fff" stroke="#cbd5e1"/>
+  <text x="385" y="298" text-anchor="middle" class="lbl">② HTTPS :443</text>
+
+  <path class="dash" d="M640,202 L640,230"/>
+
+  <path class="flow" d="M740,300 C775,300 775,231 808,231"/>
+  <rect x="736" y="252" width="82" height="18" class="pill" fill="#fff" stroke="#cbd5e1"/>
+  <text x="777" y="265" text-anchor="middle" class="lbl">③ HTTP :80</text>
+
+  <path class="flow" d="M965,286 L965,316"/>
+  <rect x="978" y="292" width="120" height="18" class="pill" fill="#fff" stroke="#cbd5e1"/>
+  <text x="1038" y="305" text-anchor="middle" class="lbl">④ JDBC :3306 (TLS)</text>
+
+  <!-- Config note -->
+  <rect x="60" y="376" width="460" height="44" rx="10" fill="#f8fafc" stroke="#e2e8f0"/>
+  <text x="76" y="395" class="t"><tspan font-weight="700" fill="#334155">Configuration</tspan> — DB_HOST / DB_USER / DB_PASSWORD / DB_NAME / PORT=5000 set as</text>
+  <text x="76" y="411" class="t">Elastic Beanstalk environment properties. No secrets in the repo or the jar.</text>
+
+  <!-- ===================== Section B: inside the jar ===================== -->
+  <rect x="40" y="458" width="1120" height="268" rx="16" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+  <text x="60" y="484" class="section">B · Inside the Spring Boot jar (single deployable artifact)</text>
+
+  <!-- React static -->
+  <rect x="60" y="520" width="190" height="118" class="box" fill="#ecfeff" stroke="#06b6d4"/>
+  <text x="155" y="545" text-anchor="middle" class="h">React build</text>
+  <text x="155" y="563" text-anchor="middle" class="mono">classpath:/static/</text>
+  <text x="155" y="582" text-anchor="middle" class="t">Served at /  (index.html, assets)</text>
+  <text x="155" y="598" text-anchor="middle" class="t">SpaWebConfig: unknown paths</text>
+  <text x="155" y="613" text-anchor="middle" class="t">→ index.html (SPA fallback)</text>
+
+  <!-- Controller -->
+  <rect x="292" y="520" width="216" height="118" class="box" fill="#eef2ff" stroke="#4f46e5"/>
+  <text x="400" y="545" text-anchor="middle" class="h">ExpenseController</text>
+  <text x="400" y="563" text-anchor="middle" class="mono">GET / POST  /api/expenses</text>
+  <text x="400" y="578" text-anchor="middle" class="mono">PUT / DELETE  /api/expenses/{id}</text>
+  <text x="400" y="593" text-anchor="middle" class="mono">GET  /api/expenses/summary</text>
+  <text x="400" y="608" text-anchor="middle" class="mono">GET  /api/categories</text>
+  <text x="400" y="626" text-anchor="middle" class="t">@Valid → Bean Validation</text>
+
+  <!-- Service -->
+  <rect x="550" y="520" width="190" height="118" class="box" fill="#eef2ff" stroke="#4f46e5"/>
+  <text x="645" y="545" text-anchor="middle" class="h">ExpenseService</text>
+  <text x="645" y="565" text-anchor="middle" class="t">CRUD, 404 on missing id</text>
+  <text x="645" y="581" text-anchor="middle" class="t">Summary: total, count,</text>
+  <text x="645" y="596" text-anchor="middle" class="t">per-category BigDecimal sums</text>
+  <text x="645" y="616" text-anchor="middle" class="mono">@Transactional</text>
+
+  <!-- Repository -->
+  <rect x="790" y="520" width="190" height="118" class="box" fill="#eef2ff" stroke="#4f46e5"/>
+  <text x="885" y="545" text-anchor="middle" class="h">ExpenseRepository</text>
+  <text x="885" y="565" text-anchor="middle" class="t">Spring Data JPA</text>
+  <text x="885" y="583" text-anchor="middle" class="mono">search(category, from, to)</text>
+  <text x="885" y="600" text-anchor="middle" class="t">JPQL with optional filters</text>
+  <text x="885" y="616" text-anchor="middle" class="t">Entity: Expense, enum Category</text>
+
+  <!-- MySQL -->
+  <rect x="1030" y="520" width="110" height="118" class="box" fill="#eef2ff" stroke="#3b48cc"/>
+  <text x="1085" y="548" text-anchor="middle" font-size="22">🗄️</text>
+  <text x="1085" y="572" text-anchor="middle" class="h">MySQL</text>
+  <text x="1085" y="590" text-anchor="middle" class="mono">expenses</text>
+  <text x="1085" y="606" text-anchor="middle" class="t">DECIMAL(12,2)</text>
+  <text x="1085" y="621" text-anchor="middle" class="t">ddl-auto=update</text>
+
+  <!-- Flows in section B -->
+  <path class="flow" d="M250,579 L292,579"/>
+  <text x="271" y="570" text-anchor="middle" class="lbl">JSON</text>
+  <path class="flow" d="M508,579 L550,579"/>
+  <path class="flow" d="M740,579 L790,579"/>
+  <path class="flow" d="M980,579 L1030,579"/>
+  <text x="1005" y="570" text-anchor="middle" class="lbl">JDBC</text>
+  <text x="1005" y="596" text-anchor="middle" class="lbl">Hikari</text>
+
+  <!-- Cross-cutting pills -->
+  <rect x="60" y="662" width="250" height="26" class="pill" fill="#fef2f2" stroke="#fca5a5"/>
+  <text x="185" y="680" text-anchor="middle" class="t"><tspan font-weight="700" fill="#b91c1c">GlobalExceptionHandler</tspan> → 400 field map, 404 JSON</text>
+  <rect x="322" y="662" width="240" height="26" class="pill" fill="#f0fdf4" stroke="#86efac"/>
+  <text x="442" y="680" text-anchor="middle" class="t"><tspan font-weight="700" fill="#15803d">Actuator</tspan> /actuator/health for ALB &amp; EB</text>
+  <rect x="574" y="662" width="290" height="26" class="pill" fill="#fffbeb" stroke="#fcd34d"/>
+  <text x="719" y="680" text-anchor="middle" class="t"><tspan font-weight="700" fill="#b45309">Config</tspan> server.port=${PORT:8080}, DB_* env vars</text>
+  <rect x="876" y="662" width="264" height="26" class="pill" fill="#f5f3ff" stroke="#c4b5fd"/>
+  <text x="1008" y="680" text-anchor="middle" class="t"><tspan font-weight="700" fill="#6d28d9">Same origin</tspan> UI + API on one host, no CORS</text>
+
+  <!-- Build pipeline footer -->
+  <text x="60" y="756" class="section">Build &amp; deploy</text>
+  <text x="60" y="778" class="t">
+    <tspan class="mono">mvn package</tspan>
+    <tspan> → frontend-maven-plugin downloads Node, runs </tspan><tspan class="mono">vite build</tspan>
+    <tspan> → dist/ copied into jar as static/ → </tspan><tspan class="mono">deploy/build-bundle.sh</tspan>
+    <tspan> zips jar + Procfile + .ebextensions → S3 → EB application version → </tspan><tspan class="mono">update-environment</tspan>
+  </text>
+</svg>

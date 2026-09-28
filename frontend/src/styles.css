@@ -257,6 +257,32 @@ h1, h2, h3, p { margin: 0; }
 .icon-btn:hover { background: var(--surface-2); border-color: var(--border); }
 .theme-toggle { width: 40px; height: 40px; border-radius: 999px; background: var(--surface); border-color: var(--border); box-shadow: var(--shadow); }
 
+/* Signed-in user (only rendered when the ALB has authenticated via Midway) */
+.user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 12px 5px 6px;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+.user-avatar {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(135deg, var(--primary), var(--primary-2));
+}
+.user-text { display: flex; flex-direction: column; line-height: 1.15; }
+.user-name { font-size: 13px; font-weight: 600; }
+.user-alias { font-size: 11px; color: var(--muted); }
+
 /* ---------- Chips ---------- */
 .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
 .chip {

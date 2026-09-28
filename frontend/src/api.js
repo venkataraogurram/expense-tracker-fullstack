@@ -28,6 +28,7 @@ function query(filters) {
 }
 
 export const api = {
+  me: () => request('/api/me'),
   categories: () => request('/api/categories'),
   list: (filters) => request(`/api/expenses${query(filters)}`),
   summary: (filters) => request(`/api/expenses/summary${query(filters)}`),
