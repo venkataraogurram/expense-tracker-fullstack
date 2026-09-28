@@ -4,6 +4,10 @@ A full-stack personal expense tracker. Add, edit, delete and filter expenses,
 and see a running total with a per-category breakdown. Amounts are in Indian
 Rupees (₹).
 
+Live demo: <https://expenses.venkatgh.people.aws.dev>
+
+![Expense Tracker running on AWS: summary with per-category bars, add-expense form, and filterable expense table](docs/screenshot.png)
+
 | Layer      | Technology                                             |
 |------------|--------------------------------------------------------|
 | Frontend   | React 18, Vite                                         |
