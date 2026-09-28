@@ -1,0 +1,28 @@
+# Maven
+target/
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath
+
+# OS
+.DS_Store
+
+# Elastic Beanstalk CLI (local state only; config.yml is safe to commit)
+.elasticbeanstalk/*
+!.elasticbeanstalk/config.yml
+
+# Local secrets / env
+.env
+*.local.properties
+
+# Filled-in EB options contain the DB password
+deploy/eb-options.json

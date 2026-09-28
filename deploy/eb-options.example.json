@@ -1,0 +1,29 @@
+[
+  {"Namespace": "aws:ec2:vpc", "OptionName": "VPCId", "Value": "vpc-REPLACE"},
+  {"Namespace": "aws:ec2:vpc", "OptionName": "Subnets", "Value": "subnet-REPLACE-a,subnet-REPLACE-b"},
+  {"Namespace": "aws:ec2:vpc", "OptionName": "ELBSubnets", "Value": "subnet-REPLACE-a,subnet-REPLACE-b"},
+  {"Namespace": "aws:ec2:vpc", "OptionName": "ELBScheme", "Value": "public"},
+  {"Namespace": "aws:ec2:vpc", "OptionName": "AssociatePublicIpAddress", "Value": "true"},
+
+  {"Namespace": "aws:elasticbeanstalk:environment", "OptionName": "EnvironmentType", "Value": "LoadBalanced"},
+  {"Namespace": "aws:elasticbeanstalk:environment", "OptionName": "LoadBalancerType", "Value": "application"},
+  {"Namespace": "aws:elasticbeanstalk:environment", "OptionName": "ServiceRole", "Value": "arn:aws:iam::ACCOUNT_ID:role/service-role/aws-elasticbeanstalk-service-role"},
+  {"Namespace": "aws:autoscaling:launchconfiguration", "OptionName": "IamInstanceProfile", "Value": "aws-elasticbeanstalk-ec2-role"},
+  {"Namespace": "aws:autoscaling:launchconfiguration", "OptionName": "SecurityGroups", "Value": "sg-REPLACE-app"},
+  {"Namespace": "aws:ec2:instances", "OptionName": "InstanceTypes", "Value": "t3.small"},
+  {"Namespace": "aws:autoscaling:asg", "OptionName": "MinSize", "Value": "1"},
+  {"Namespace": "aws:autoscaling:asg", "OptionName": "MaxSize", "Value": "2"},
+  {"Namespace": "aws:elasticbeanstalk:healthreporting:system", "OptionName": "SystemType", "Value": "enhanced"},
+
+  {"Namespace": "aws:elbv2:listener:443", "OptionName": "ListenerEnabled", "Value": "true"},
+  {"Namespace": "aws:elbv2:listener:443", "OptionName": "Protocol", "Value": "HTTPS"},
+  {"Namespace": "aws:elbv2:listener:443", "OptionName": "SSLCertificateArns", "Value": "arn:aws:acm:us-east-1:ACCOUNT_ID:certificate/REPLACE"},
+  {"Namespace": "aws:elbv2:listener:443", "OptionName": "SSLPolicy", "Value": "ELBSecurityPolicy-TLS13-1-2-2021-06"},
+
+  {"Namespace": "aws:elasticbeanstalk:application:environment", "OptionName": "PORT", "Value": "5000"},
+  {"Namespace": "aws:elasticbeanstalk:application:environment", "OptionName": "DB_HOST", "Value": "expense-tracker-db.REPLACE.us-east-1.rds.amazonaws.com"},
+  {"Namespace": "aws:elasticbeanstalk:application:environment", "OptionName": "DB_PORT", "Value": "3306"},
+  {"Namespace": "aws:elasticbeanstalk:application:environment", "OptionName": "DB_NAME", "Value": "expense_tracker"},
+  {"Namespace": "aws:elasticbeanstalk:application:environment", "OptionName": "DB_USER", "Value": "expense"},
+  {"Namespace": "aws:elasticbeanstalk:application:environment", "OptionName": "DB_PASSWORD", "Value": "REPLACE"}
+]
