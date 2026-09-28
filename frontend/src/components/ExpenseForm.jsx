@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { formatCategory } from '../format.js';
+import { categoryMeta, formatCategory } from '../format.js';
 
 function today() {
   return new Date().toISOString().slice(0, 10);
@@ -8,10 +8,9 @@ function today() {
 const EMPTY = { title: '', amount: '', category: 'FOOD', date: today(), notes: '' };
 
 export default function ExpenseForm({ categories, initial, onSave, onCancel }) {
-  const [form, setForm] = useState(initial ? { ...EMPTY, ...initial } : EMPTY);
+  const [form, setForm] = useState(initial ? { ...EMPTY, ...initial, notes: initial.notes || '' } : EMPTY);
   const [errors, setErrors] = useState({});
   const [saving, setSaving] = useState(false);
-  const [message, setMessage] = useState('');
 
   function set(field, value) {
     setForm((f) => ({ ...f, [field]: value }));
@@ -21,7 +20,6 @@ export default function ExpenseForm({ categories, initial, onSave, onCancel }) {
   async function submit(e) {
     e.preventDefault();
     setSaving(true);
-    setMessage('');
     try {
       await onSave({
         title: form.title.trim(),
@@ -32,7 +30,6 @@ export default function ExpenseForm({ categories, initial, onSave, onCancel }) {
       });
       if (!initial) setForm({ ...EMPTY, category: form.category, date: form.date });
       setErrors({});
-      setMessage(initial ? 'Saved.' : 'Expense added.');
     } catch (err) {
       // Server-side validation errors come back keyed by field name.
       setErrors(err.details || { _form: err.message });
@@ -43,62 +40,85 @@ export default function ExpenseForm({ categories, initial, onSave, onCancel }) {
 
   return (
     <form className="form" onSubmit={submit} noValidate>
-      <label>
-        Title
+      <label className="field">
+        <span>Title</span>
         <input
           value={form.title}
           onChange={(e) => set('title', e.target.value)}
-          placeholder="Groceries"
+          placeholder="e.g. Groceries"
           maxLength={100}
+          autoFocus={!!initial}
+          className={errors.title ? 'invalid' : ''}
         />
-        {errors.title && <span className="field-error">{errors.title}</span>}
+        {errors.title && <em className="field-error">{errors.title}</em>}
       </label>
 
       <div className="row">
-        <label>
-          Amount
-          <input
-            type="number"
-            step="0.01"
-            min="0"
-            value={form.amount}
-            onChange={(e) => set('amount', e.target.value)}
-            placeholder="0.00"
-          />
-          {errors.amount && <span className="field-error">{errors.amount}</span>}
+        <label className="field">
+          <span>Amount</span>
+          <div className={`adorned ${errors.amount ? 'invalid' : ''}`}>
+            <span className="adornment">₹</span>
+            <input
+              type="number"
+              step="0.01"
+              min="0"
+              inputMode="decimal"
+              value={form.amount}
+              onChange={(e) => set('amount', e.target.value)}
+              placeholder="0.00"
+            />
+          </div>
+          {errors.amount && <em className="field-error">{errors.amount}</em>}
         </label>
-        <label>
-          Date
-          <input type="date" value={form.date} onChange={(e) => set('date', e.target.value)} />
-          {errors.date && <span className="field-error">{errors.date}</span>}
+        <label className="field">
+          <span>Date</span>
+          <input
+            type="date"
+            value={form.date}
+            onChange={(e) => set('date', e.target.value)}
+            className={errors.date ? 'invalid' : ''}
+          />
+          {errors.date && <em className="field-error">{errors.date}</em>}
         </label>
       </div>
 
-      <label>
-        Category
-        <select value={form.category} onChange={(e) => set('category', e.target.value)}>
-          {categories.map((c) => (
-            <option key={c} value={c}>
-              {formatCategory(c)}
-            </option>
-          ))}
-        </select>
-        {errors.category && <span className="field-error">{errors.category}</span>}
-      </label>
+      <fieldset className="field">
+        <legend>Category</legend>
+        <div className="cat-grid">
+          {categories.map((c) => {
+            const { icon, color } = categoryMeta(c);
+            const selected = form.category === c;
+            return (
+              <button
+                key={c}
+                type="button"
+                className={`cat ${selected ? 'selected' : ''}`}
+                style={selected ? { '--cat': color } : undefined}
+                onClick={() => set('category', c)}
+                aria-pressed={selected}
+              >
+                <span aria-hidden="true">{icon}</span>
+                <small>{formatCategory(c)}</small>
+              </button>
+            );
+          })}
+        </div>
+        {errors.category && <em className="field-error">{errors.category}</em>}
+      </fieldset>
 
-      <label>
-        Notes <span className="muted">(optional)</span>
+      <label className="field">
+        <span>Notes <span className="muted">(optional)</span></span>
         <textarea
           rows={2}
-          value={form.notes || ''}
+          value={form.notes}
           onChange={(e) => set('notes', e.target.value)}
           maxLength={500}
+          placeholder="Anything worth remembering"
         />
-        {errors.notes && <span className="field-error">{errors.notes}</span>}
+        {errors.notes && <em className="field-error">{errors.notes}</em>}
       </label>
 
-      {errors._form && <div className="banner error">{errors._form}</div>}
-      {message && <div className="banner ok">{message}</div>}
+      {errors._form && <div className="alert">{errors._form}</div>}
 
       <div className="actions">
         <button type="submit" className="btn primary" disabled={saving}>

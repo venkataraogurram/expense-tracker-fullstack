@@ -6,7 +6,17 @@ Rupees (₹).
 
 Live demo: <https://expenses.venkatgh.people.aws.dev>
 
-![Expense Tracker running on AWS: summary with per-category bars, add-expense form, and filterable expense table](docs/screenshot.png)
+![Expense Tracker: stat cards, add-expense form with category picker, filter chips, expense list and donut breakdown](docs/screenshot.png)
+
+<details>
+<summary>Dark mode</summary>
+
+![Expense Tracker in dark mode](docs/screenshot-dark.png)
+</details>
+
+Features: add / edit / delete expenses, filter by month and category (chips or
+by clicking a donut segment), running total with per-category breakdown,
+server-side validation shown inline, light/dark theme, responsive layout.
 
 | Layer      | Technology                                             |
 |------------|--------------------------------------------------------|
@@ -59,10 +69,16 @@ is needed in either development (Vite proxies `/api` to 8080) or production.
 ├── src/main/resources/application.properties
 └── frontend/                       React app (Vite)
     └── src/
-        ├── App.jsx                 State, data loading, layout
+        ├── App.jsx                 State, data loading, layout, theme
         ├── api.js                  fetch() wrapper for /api
-        ├── format.js               ₹ / date formatting (en-IN)
-        └── components/             Summary, Filters, ExpenseForm, ExpenseList
+        ├── format.js               ₹ / date formatting (en-IN), category icons + colours
+        ├── styles.css              Design tokens (light/dark), layout, components
+        └── components/
+            ├── StatCards.jsx       Total, transaction count, top category
+            ├── Breakdown.jsx       SVG donut chart + legend (no chart library)
+            ├── ExpenseForm.jsx     Add/edit form with category picker
+            ├── ExpenseList.jsx     Rows with inline delete confirmation, skeletons
+            └── Toast.jsx           Self-dismissing notifications
 ```
 
 ## REST API
@@ -290,3 +306,9 @@ aws ec2 delete-security-group --group-name expense-tracker-app-sg
   under the matching inputs.
 - **SPA fallback:** `SpaWebConfig` returns `index.html` for unknown
   non-API paths so a browser refresh on a client route does not 404.
+- **No UI or chart library.** The donut is ~40 lines of SVG
+  (`stroke-dasharray` per segment), theming is CSS custom properties switched
+  by `<html data-theme>`, and state is plain `useState`/`useEffect`. Keeps the
+  bundle at ~50 KB gzipped and every line explainable.
+- **Theme resolution order:** `?theme=` URL param → saved choice in
+  `localStorage` → OS `prefers-color-scheme`.
